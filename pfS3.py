@@ -1,11 +1,11 @@
 """
 
 todo: 
-  1. abstract list buckets
-  2. abstract list contents of bucket
-  3. abstract copy to bucket
-  4. abstract delete bucket
-  5. abstract delete from bucket 
+  1. list buckets
+  2. list contents of bucket
+  3. copy to bucket
+  4. delete bucket
+  5. delete from bucket 
 
 """
 
@@ -17,9 +17,25 @@ import sys
 from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3.prefix import Prefix
 import ConfigParser
+import argparse
 
-#logging
-logging.basicConfig(filename="boto.log", level=logging.DEBUG)
+# setup argument parsing
+def _make_arg_parser()
+  parser = argparse.ArgumentParser(description="usage: pfS3 -b 'bucket' -c '/path/to/data'")
+  parser.add_argument("-b", "--bucket", help="name of the bucket")
+  parser.add_argument("-D", "--delete", help="delete a bucket")
+  parser.add_argument("-c", "--copy", help="data to be copied")
+  parser.add_argument("-l", "--list", help="list buckets, or contents of bucket if used with -b")
+  parser.add_argument("-L", "--log", help="set logging directory")
+  return parser
+
+# setup logging
+def _configure_logging():
+  log_dir = os.path.join('pfS3_Logs')
+  if not os.path.isfir(log_dir):
+    os.mkdir(log_directory)
+  log_file = os.path.join(log_dir + 'pfS3_Logs', 'pfS3' + time.strftime('%y_%m_%d') + '.log')
+  logging.basicConfig(filename=log_file, format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 # get config
 config = ConfigParser.RawConfigParser()
@@ -28,9 +44,10 @@ S3_key_id = config.get('S3Connection', 'aws_access_key_id')
 S3_secret_key = config.get('S3Connection','aws_secret_access_key')
 S3_host = config.get('S3Connection','host')
 S3_port = config.getint('S3Connection', 'port')
-S3_is_secure = config.get('S3Connection','is_secure')
+S3_is_secure = config.getboolean('S3Connection','is_secure')
 S3_calling_format = config.get('S3Connection', 'calling_format')
 
+# connect!
 conn = S3Connection(
     aws_access_key_id=S3_key_id,
     aws_secret_access_key=S3_secret_key,
