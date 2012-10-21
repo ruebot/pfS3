@@ -1,0 +1,6 @@
+boto.log
+config.cfg
+build
+dist
+iaTorrent.egg-info
+iaTorrent.pyc
