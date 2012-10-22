@@ -15,7 +15,7 @@ class TestCRUDFunctions(unittest.TestCase):
 		self.configParser = pfS3.get_config()
 		self.assertTrue(isinstance(configParser, ConfigParser.RawConfigParser))
 	
-	def test_make_connection(self):
+	def test_connect(self):
 		""" Test pfS3.connect() function """
 		access_key = self.configParser.get('S3Connection', 'aws_access_key_id')
 		secret_key = self.configParser.get('S3Connection', 'aws_secret_access_key')
@@ -24,12 +24,12 @@ class TestCRUDFunctions(unittest.TestCase):
 
 	def test_create_bucket(self):
 		""" Test pfS3.create_bucket() function """
-		self.bucket = self.connection.create_bucket(self.configParser.get('S3Connection', 'aws_access_key_id') + '_unitTestBucket')
+		self.bucket = pfS3.create_bucket(self.configParser.get('S3Connection', 'aws_access_key_id') + '_unitTestBucket')
 		self.assertTrue(isinstance(self.bucket, boto.s3.bucket.Bucket))
 	
 	def test_list_buckets(self):
 		""" Test pfS3.list_buckets() function """
-		bucketlist = self.connection.get_all_buckets()
+		bucketlist = pfS3.list_buckets()
 		self.assertTrue(isinstance(bucketlist, boto.resultset.ResultSet))
 	
 	def test_save_to_bucket(self):
