@@ -39,9 +39,16 @@ class TestCRUDFunctions(unittest.TestCase):
 		saved_data = pfS3.save_to_bucket(key, data)
 		self.assertTrue(False) # FIXME: Not sure how to test these results
 	
+	def test_get_from_bucket(self):
+		""" Tests pfS3.get_from_bucket() function """
+		key = "CHANGEME"
+		returned_data = pfS3.get_from_bucket(self.bucket, key)
+		self.assertTrue(isinstance(returned_data, str)) # FIXME: presumes string, what about other data?
+		self.assertEquals(returned_data, "ASDFJKL")
+		
 	def test_list_bucket_contents(self):
 		""" Test pfS3.list_bucket_contents() function """
-		contents = self.bucket.list()
+		contents = pfS3.list_bucket_contents(self.bucket)
 		for obj in contents:
 			self.assertTrue(False) # FIXME: actually check for something in the contents
 	

@@ -11,11 +11,12 @@ todo:
 
 import os
 import logging
+from boto.exception import S3CreateError
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
-import sys
-from boto.s3.connection import OrdinaryCallingFormat
-from boto.s3.prefix import Prefix
+#import sys
+#from boto.s3.connection import OrdinaryCallingFormat
+#from boto.s3.prefix import Prefix
 import ConfigParser
 import argparse
 
@@ -37,34 +38,42 @@ def _configure_logging():
   log_file = os.path.join(log_dir + 'pfS3_Logs', 'pfS3' + time.strftime('%y_%m_%d') + '.log')
   logging.basicConfig(filename=log_file, format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
-# get config
-config = ConfigParser.RawConfigParser()
-config.read(os.path.join('config.cfg'))
+def get_config():
+	# get config
+	config = ConfigParser.RawConfigParser()
+	config.read(os.path.join('config.cfg'))
+	return config
+	
+"""
 S3_key_id = config.get('S3Connection', 'aws_access_key_id')
 S3_secret_key = config.get('S3Connection','aws_secret_access_key')
 S3_host = config.get('S3Connection','host')
 S3_port = config.getint('S3Connection', 'port')
 S3_is_secure = config.getboolean('S3Connection','is_secure')
 S3_calling_format = config.get('S3Connection', 'calling_format')
+"""
 
-# connect!
-conn = S3Connection(
-    aws_access_key_id=S3_key_id,
-    aws_secret_access_key=S3_secret_key,
-    host=S3_host,
-    port=S3_port,
-    is_secure=S3_is_secure,
-    calling_format=S3_calling_format
-)
+def connect(access_key, secret_key):
+	# connect!
+	conn = S3Connection(
+		aws_access_key_id=access_key,
+		aws_secret_access_key=secret_key,
+		#host=S3_host,
+		#port=S3_port,
+		#is_secure=S3_is_secure,
+		#calling_format=S3_calling_format
+	)
+	return conn
 
+#print "--connection--",conn
 
-print "--connection--",conn
+#print "These are yo buckets:"
 
-print "These are yo buckets:"
-
-rs = conn.get_all_buckets()
-for b in rs:
-  print b.name
+def list_buckets():
+	rs = conn.get_all_buckets()
+	for b in rs:
+  		print b.name
+	return rs
 
 #print "--buckets--",conn.get_all_buckets()
 
@@ -72,16 +81,31 @@ for b in rs:
 
 #bucket = conn.create_bucket('stevelikesbuckets')
 #print "I MADE YO BUCKET BRO!"
-bucket = conn.get_bucket('stevelikesbuckets')
+#bucket = conn.get_bucket('stevelikesbuckets')
 
-k = Key(bucket)
-k.key = 'johnisreallyconfused'
-k.set_contents_from_string('This is a test of S3')
+def create_bucket(name):
+	bucket = None
+	try:
+		bucket = conn.create_bucket(name)
+	except S3CreateError:
+		print "Can't create bucket '", name, "'."
+	return bucket
 
-# Get the object back
-b = conn.get_bucket('stevelikesbuckets')
-k = Key(b)
-k.key = 'johnisreallyconfused'
-k.get_contents_as_string()
+def save_to_bucket(bucket, key, value):
+	k = Key(bucket)
+	k.key = key
+	ret = k.set_contents_from_string(value)
+	return ret
+	
+def get_from_bucket(bucket, key):
+	k = Key(bucket)
+	k.key = key
+	ret = k.get_contents_as_string()
+	return ret
 
-
+def list_bucket_contents(bucket):
+	objects = bucket.list()
+	return objects
+	
+def delete_bucket(bucket):
+	pass
