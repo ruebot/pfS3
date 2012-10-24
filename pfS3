@@ -25,6 +25,7 @@ import argparse
 def _make_arg_parser():
   parser = argparse.ArgumentParser(description="usage: pfS3 -b 'bucket' -c '/path/to/data'")
   parser.add_argument("-b", "--bucket", help="name of the bucket")
+  parser.add_argument("-n", "--new", help="create a new bucket")
   parser.add_argument("-D", "--destroy", help="delete a bucket")
   parser.add_argument("-c", "--copy", help="data to be copied")
   parser.add_argument("-l", "--ls", help="list buckets, or contents of bucket if used with -b")
@@ -34,7 +35,7 @@ def _make_arg_parser():
 # setup logging
 def _configure_logging():
   log_dir = os.path.join('pfS3_Logs')
-  if not os.path.isfir(log_dir):
+  if not os.path.isdir(log_dir):
     os.mkdir(log_directory)
   log_file = os.path.join(log_dir + 'pfS3_Logs', 'pfS3' + time.strftime('%y_%m_%d') + '.log')
   logging.basicConfig(filename=log_file, format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
@@ -91,12 +92,29 @@ if __name__ == '__main__':
   args = arg_parser.parse_args()
   bucket = args.bucket
   destroy = args.destroy
-  copy = arg.copy
-  log = arg.log
+  copy = args.copy
+  log = args.log
+  newBucket = args.new
 
   _configure_logging()
   log = logging.getLogger()
 
+  #create bucket
+  if bucket && newBucket:
+  	_create_bucket(bucket)
+  #list buckets
+  if ls:
+  	_list_buckets()
+  #list bucket contents
+  if ls and bucket:
+  	_list_bucket_objects(bucket)
+  #copy data to bucket
+  if bucket and copy:
+  	_save_to_bucket(bucket, copy)
+  #delete bucket
+  if bucket and destroy:
+  	_destroy(bucket)
+  	
   rc = 0
 
   sys.exit(rc)
