@@ -68,21 +68,21 @@ def _list_buckets(): # NEED TO FINISH
   for bucket in buckets:
     print bucket.name
 
-def _create_bucket():
-  bucket = conn.get_bucket('bucket_arg')
+def _create_bucket(bucket):
+  bucket = conn.get_bucket(bucket)
 
-def _save_to_bucket(): # NEED TO FINISH
+def _save_to_bucket(bucket, copy): # NEED TO FINISH
   k = Key(bucket_name)
   k.key = 'data_to_be_saved'
   k.set_contents_from_string('data_to_be_saved') # CHANGE THIS -- LOOK AT API DOCUMENTATION AGAIN
 
-def _list_bucket_objects(): # NEED TO FINISH
-  b = conn.get_bucket('bucket_arg')
+def _list_bucket_objects(bucket): # NEED TO FINISH
+  b = conn.get_bucket(bucket)
   k = Key(bucket)
   k.key = 'johnisreallyconfused'
   k.get_contents_as_string()
 
-def _destroy(): # NEED TO FINISH
+def _destroy(bucket): # NEED TO FINISH
   print "this is where i delete a bucket"
 
   
@@ -92,7 +92,6 @@ if __name__ == '__main__':
   bucket = args.bucket
   destroy = args.destroy
   copy = arg.copy
-  ls = arg.ls
   log = arg.log
 
   _configure_logging()
