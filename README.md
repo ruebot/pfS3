@@ -2,6 +2,9 @@
 
 note: not ready
 
+[![Build Status](https://secure.travis-ci.org/ruebot/pfS3.png)](http://travis-ci.org/ruebot/pfS3)
+
+
 ### Description
 
 pfS3 serves as a client for the PERMAFROST S3 API which is based on OpenStack Swift.
