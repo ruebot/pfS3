@@ -22,12 +22,12 @@ import ConfigParser
 import argparse
 
 # setup argument parsing
-def _make_arg_parser()
+def _make_arg_parser():
   parser = argparse.ArgumentParser(description="usage: pfS3 -b 'bucket' -c '/path/to/data'")
   parser.add_argument("-b", "--bucket", help="name of the bucket")
-  parser.add_argument("-D", "--delete", help="delete a bucket")
+  parser.add_argument("-D", "--destroy", help="delete a bucket")
   parser.add_argument("-c", "--copy", help="data to be copied")
-  parser.add_argument("-l", "--list", help="list buckets, or contents of bucket if used with -b")
+  parser.add_argument("-l", "--ls", help="list buckets, or contents of bucket if used with -b")
   parser.add_argument("-L", "--log", help="set logging directory")
   return parser
 
@@ -81,3 +81,23 @@ def _list_bucket_objects(): # NEED TO FINISH
   k = Key(bucket)
   k.key = 'johnisreallyconfused'
   k.get_contents_as_string()
+
+def _destroy(): # NEED TO FINISH
+  print "this is where i delete a bucket"
+
+  
+if __name__ == '__main__':
+  arg_parser = _make_arg_parser()
+  args = arg_parser.parse_args()
+  bucket = args.bucket
+  destroy = args.destroy
+  copy = arg.copy
+  ls = arg.ls
+  log = arg.log
+
+  _configure_logging()
+  log = logging.getLogger()
+
+  rc = 0
+
+  sys.exit(rc)

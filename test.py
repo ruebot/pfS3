@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import unittest
-import pfS3
 import ConfigParser
 import boto
+import pfS3
 
 class TestCRUDFunctions(unittest.TestCase):
 	
@@ -48,4 +48,7 @@ class TestCRUDFunctions(unittest.TestCase):
 	def test_delete_bucket(self):
 		""" Teset pfS3.delete_bucket() function """
 		deleted = pfS3.delete_bucket(self.bucket)
-		self.assertTrue(False) # FIXME	
+		self.assertTrue(False) # FIXME
+
+if __name__ == '__main__':
+  unittest.main()
