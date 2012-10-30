@@ -3,3 +3,4 @@ config.cfg
 build
 dist
 pfS3.egg-info
+pfS3_Logs
