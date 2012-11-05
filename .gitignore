@@ -4,3 +4,4 @@ build
 dist
 pfS3.egg-info
 pfS3_Logs
+pfS3.pyc
